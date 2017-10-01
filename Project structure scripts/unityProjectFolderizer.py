@@ -16,7 +16,7 @@ userInput = input(
                 .format(folderNames.__len__(), dirPath))
 if userInput == 'y' or userInput == 'Y':
     for f in folderNames:
-        fullPath = dirPath + '\\' + f
+        fullPath = os.path.join(dirPath, f)
         print(fullPath)
         if not os.path.exists(fullPath):
             os.makedirs(f)
