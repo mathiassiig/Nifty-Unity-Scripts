@@ -1,0 +1,35 @@
+#!/usr/bin/env stack
+-- stack --install-ghc runghc --package turtle
+{-# LANGUAGE OverloadedStrings #-} 
+
+import Turtle
+import Data.Traversable
+import Data.Foldable
+import qualified Filesystem.Path.CurrentOS as Path
+
+folderNames = ["Audio",
+                "Animations",
+                "Images",
+                "Materials",
+                "Plugins",
+                "Prefabs",
+                "Resources",
+                "Scripts",
+                "Scenes"]
+pathText path = 
+    case Path.toText path of 
+        Right validPath -> validPath
+        Left invalidPath -> error "invalid path brother"
+
+main = do
+    dirPath <- pwd
+    printf
+        ("This will make "%d% " folders in " %s% ", write 'y' to continue\n") 
+        (length folderNames)
+        (pathText dirPath)
+    Just userInput <- readline
+    when (userInput == "y" || userInput == "Y") $ do
+        for_ folderNames $ \f -> do
+            let fullPath = dirPath </> f
+            mktree fullPath
+            printf ("Created folder " %s% "\n") (pathText fullPath)
